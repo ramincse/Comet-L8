@@ -32,12 +32,21 @@ Route::post('/admin/logout', [App\Http\Controllers\Auth\LoginController::class, 
 Route::post('/admin/register', [App\Http\Controllers\Auth\RegisterController::class, 'register'])->name('admin.register');
 
 /**
- * Route Post
+ * Route For Blog Post
  */
 Route::resource('/post', 'App\Http\Controllers\PostController');
+Route::get('/post-trash', 'App\Http\Controllers\PostController@postTrashShow')->name('post.trash');
+Route::get('/post-trash-update/{id}', 'App\Http\Controllers\PostController@postTrashUpdate')->name('post.trash.update');
 Route::resource('/category', 'App\Http\Controllers\CategoryController');
 Route::get('/category/status-inactive/{id}', 'App\Http\Controllers\CategoryController@statusUpdateInactive');
 Route::get('/category/status-active/{id}', 'App\Http\Controllers\CategoryController@statusUpdateActive');
 Route::resource('/tag', 'App\Http\Controllers\TagController');
 Route::get('/tag/status-inactive/{id}', 'App\Http\Controllers\TagController@statusUpdateInactive');
 Route::get('/tag/status-active/{id}', 'App\Http\Controllers\TagController@statusUpdateActive');
+
+
+
+/**
+ * Route For Frontend
+ */
+Route::get('blog', [\App\Http\Controllers\BlogPageController::class, 'showBlogPage']);

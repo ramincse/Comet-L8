@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Post;
+use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -13,7 +17,10 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('admin.post.index');
+        $all_data = Post::where('trash', false) -> get();
+        $published = Post::where('trash', false) -> get() -> count();
+        $trash = Post::where('trash', true) -> get() -> count();
+        return view('admin.post.index', compact('all_data', 'published', 'trash'));
     }
 
     /**
@@ -23,7 +30,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        $all_call = Category::all();
+        $all_tags = Tag::all();
+        return view('admin.post.create', compact('all_call', 'all_tags'));
     }
 
     /**
@@ -34,7 +43,44 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $this -> validate($request, [
+            'title' => 'required',
+            'content' => 'required',
+        ]);
+        
+        $image_uname = '';
+        if( $request->hasFile('image') ){
+            $img = $request->file('image');
+            $image_uname = md5( time() . rand() ) . '.' . $img -> getClientOriginalExtension();
+            $img->move( public_path('media/posts'), $image_uname );
+        }
+
+        $gall_images = [];
+        if ($request->hasFile('post_gall')) {            
+            foreach( $request->file('post_gall') as $post_gall ){
+                $post_gall_uname = md5(time() . rand()) . '.' . $post_gall->getClientOriginalExtension();
+                $post_gall->move(public_path('media/posts'), $post_gall_uname);
+                array_push($gall_images, $post_gall_uname);
+            }
+        }
+
+        $post_featured = [
+            'post_type'  => $request->post_type,
+            'post_image' => $image_uname,
+            'post_gall'  => $gall_images,
+            'post_audio' => $request->post_audio,
+            'post_video' => $request->post_video,
+        ];
+
+        Post::create([
+            'title'     => $request->title,
+            'slug'      => Str::slug($request->title),
+            'featured'  => json_encode($post_featured),
+            'content'   => $request->content,
+        ]);
+
+        return redirect()->route('post.index')->with('success', 'Post added successfull');
     }
 
     /**
@@ -79,6 +125,30 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $delete_data = Post::find($id);
+        $delete_data->delete();
+        return redirect()->route('post.trash')->with('success', 'Post deleted successfull');
+    }
+
+    public function postTrashShow()
+    {
+        $all_data = Post::where('trash', true)->get();
+        $published = Post::where('trash', false)->get()->count();
+        $trash = Post::where('trash', true)->get()->count();
+        return view('admin.post.trash', compact('all_data', 'published', 'trash'));   
+    }
+
+    public function postTrashUpdate($id)
+    {
+        $trash_data = Post::find($id);
+
+        if( $trash_data->trash == false ){
+            $trash_data->trash = true;
+        }else{
+            $trash_data->trash = false;
+        }
+
+        $trash_data -> update();
+        return redirect()->route('post.index')->with('success', 'Post trashed successfull');
     }
 }

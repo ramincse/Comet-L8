@@ -22,6 +22,9 @@
 
     <link rel="stylesheet" href="{{ asset('admin/assets/plugins/morris/morris.css') }}">
 
+    <!-- Select 2 Plugins -->
+    <link rel="stylesheet" href="{{ asset('admin/assets/css/select2.min.css') }}">
+
     <!-- Main CSS -->
     <link rel="stylesheet" href="{{ asset('admin/assets/css/style.css') }}">
 
@@ -51,8 +54,15 @@
     <script src="{{ asset('admin/assets/plugins/morris/morris.min.js') }}"></script>
     <script src="{{ asset('admin/assets/js/chart.morris.js') }}"></script>
 
+    <!-- CK Editor -->
+    <script src="//cdn.ckeditor.com/4.16.0/full/ckeditor.js"></script>
+
+    <!-- Select 2 Plugins -->
+    <script src="{{ asset('admin/assets/js/select2.min.js') }}"></script>
+
     <!-- Custom JS -->
     <script src="{{ asset('admin/assets/js/script.js') }}"></script>
     <script src="{{ asset('admin/assets/js/comet/custom.js') }}"></script>
+
 
 </html>

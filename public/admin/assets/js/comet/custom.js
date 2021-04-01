@@ -9,6 +9,16 @@
         });
 
         /**
+         * Post CK Editor Load
+         */
+        CKEDITOR.replace('post_ek_editor');
+
+        /**
+         * Post Select option in Tags
+         */
+        $('.post_tag_select').select2();
+
+        /**
          * Category Switcher
          */
         $(document).on('change', '.cat_check', function(){
@@ -119,6 +129,64 @@
                 }
             });
         });
+
+        /**
+         * Select Blog Post Format
+         */
+        $(document).on('change', '#post_format', function (e) {
+            e.preventDefault();
+
+            let format = $(this).val();
+            
+            if (format == 'Image' ){
+                $('.post-image').show();
+            }else{
+                $('.post-image').hide();
+            }
+
+            if (format == 'Gallery') {
+                $('.post-gallery').show();
+            } else {
+                $('.post-gallery').hide();
+            }
+
+            if (format == 'Audio') {
+                $('.post-audio').show();
+            } else {
+                $('.post-audio').hide();
+            }
+
+            if (format == 'Video') {
+                $('.post-video').show();
+            } else {
+                $('.post-video').hide();
+            }
+        });
+
+        /**
+         * Blog Post Featured Image Load 
+         */
+        $(document).on('change', '#post_feat_image', function (e) {
+            e.preventDefault();
+
+            let file_url = URL.createObjectURL(e.target.files[0]);
+            $('img#post_feat_image_load').attr('src', file_url);
+        });
+
+        /**
+         * Blog Post Gallery Image Load
+         */
+        $(document).on('change', '#post_gall_image', function (e) {
+            let img_gall = '';
+            for (let i = 0; i < e.target.files.length; i++ ){
+                let file_url = URL.createObjectURL(e.target.files[i]);
+
+                img_gall += '<img class="shadow" style="width: 150px; height: 150px; border: 1px solid #ccc; border-radius: 4px; margin: 0 5px;" src="' + file_url +'" >';
+            }
+
+            $('.post-gallery-img').html(img_gall);
+        });
+        
 
 
 
