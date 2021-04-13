@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -43,7 +44,6 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-
         $this -> validate($request, [
             'title' => 'required',
             'content' => 'required',
@@ -65,20 +65,36 @@ class PostController extends Controller
             }
         }
 
+        //Video Link Formate
+        $file_array = explode('/', $request->post_video);
+        if (in_array('www.youtube.com', $file_array)) {
+            $video_link = str_replace('watch?v=', 'embed/', $request->post_video);
+        } elseif (in_array('vimeo.com', $file_array)) {
+            $video_link = str_replace('vimeo.com/', 'player.vimeo.com/video/', $request->post_video);
+        }else{
+            $video_link = 'Link format not correct';
+        }
+
         $post_featured = [
             'post_type'  => $request->post_type,
             'post_image' => $image_uname,
             'post_gall'  => $gall_images,
             'post_audio' => $request->post_audio,
-            'post_video' => $request->post_video,
+            'post_video' => $video_link,
         ];
 
-        Post::create([
+        $post_data = Post::create([
+            'user_id'   => Auth::user()->id,
             'title'     => $request->title,
             'slug'      => Str::slug($request->title),
-            'featured'  => json_encode($post_featured),
+            'featured'  => json_encode($post_featured), 
+            //json_encode($array,JSON_UNESCAPED_SLASHES); //JSON.stringfy(json); //json_decode($mystring, JSON_UNESCAPED_SLASHES);
+
             'content'   => $request->content,
         ]);
+
+        $post_data -> categories() -> attach($request->cat);
+        $post_data -> tags() -> attach($request->tag);
 
         return redirect()->route('post.index')->with('success', 'Post added successfull');
     }
@@ -150,5 +166,20 @@ class PostController extends Controller
 
         $trash_data -> update();
         return redirect()->route('post.index')->with('success', 'Post trashed successfull');
+    }
+
+    /**
+     * Blog Post Status Update
+     */
+    public function postStatusUpdate($id)
+    {
+        $status_update = Post::find($id);
+
+        if( $status_update->status == true){
+            $status_update->status = false;
+        }else{
+            $status_update->status = true;
+        }
+        $status_update->update();
     }
 }

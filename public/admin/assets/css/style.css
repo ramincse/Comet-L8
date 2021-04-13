@@ -4145,3 +4145,7 @@ table.table-inbox tbody tr.checked {
 .post-image, .post-gallery, .post-audio, .post-video{
 	display: none;
 }
+
+#add_role_modal .checkbox, #edit_role_modal .checkbox{float: left; margin-right: 7px;}
+
+.permission:last-child{display: none;}

@@ -37,16 +37,30 @@ Route::post('/admin/register', [App\Http\Controllers\Auth\RegisterController::cl
 Route::resource('/post', 'App\Http\Controllers\PostController');
 Route::get('/post-trash', 'App\Http\Controllers\PostController@postTrashShow')->name('post.trash');
 Route::get('/post-trash-update/{id}', 'App\Http\Controllers\PostController@postTrashUpdate')->name('post.trash.update');
+Route::get('/post-status-update/{id}', 'App\Http\Controllers\PostController@postStatusUpdate')->name('post.status.update');
+
 Route::resource('/category', 'App\Http\Controllers\CategoryController');
 Route::get('/category/status-inactive/{id}', 'App\Http\Controllers\CategoryController@statusUpdateInactive');
 Route::get('/category/status-active/{id}', 'App\Http\Controllers\CategoryController@statusUpdateActive');
+
 Route::resource('/tag', 'App\Http\Controllers\TagController');
 Route::get('/tag/status-inactive/{id}', 'App\Http\Controllers\TagController@statusUpdateInactive');
 Route::get('/tag/status-active/{id}', 'App\Http\Controllers\TagController@statusUpdateActive');
 
-
+/**
+ * Route For Role
+ */
+Route::resource('/role', 'App\Http\Controllers\RoleController');
+Route::get('edit-role/{id}', 'App\Http\Controllers\RoleController@edit')->name('edit.role');
 
 /**
  * Route For Frontend
  */
 Route::get('blog', [\App\Http\Controllers\BlogPageController::class, 'showBlogPage']);
+
+/**
+ * Route For Search Blog Post
+ */
+Route::post('blog', [\App\Http\Controllers\BlogPageController::class, 'searchBlog'])->name('post.search');
+Route::get('blog/category/{slug}', [\App\Http\Controllers\BlogPageController::class, 'searchBlogByCat'])->name('post.cat.search');
+Route::get('blog/tag/{slug}', [\App\Http\Controllers\BlogPageController::class, 'searchBlogByTag'])->name('post.tag.search');

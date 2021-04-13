@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Models\Role;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $all_data = Category::latest()->get();
-        return view('admin.post.category.index', compact('all_data'));
+        $all_data = Role::all();
+        return view('admin.role.index', compact('all_data'));
     }
 
     /**
@@ -37,16 +37,15 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required|unique:categories',
-        ]);
+        $permission = json_encode($request->per);
 
-        Category::create([
+        Role::create([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
+            'permission' => $permission,
         ]);
 
-        return redirect()->route('category.index')->with('success', 'Category added successfull');
+        return redirect()->route('role.index')->with('success', 'Role added successfull');
     }
 
     /**
@@ -68,11 +67,11 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $edit_data = Category::find($id);
+        $data = Role::find($id);
 
         return [
-            'id'    => $edit_data->id,
-            'name'  => $edit_data->name,
+            'id'    => $data->id,
+            'name'  => $data->name,
         ];
     }
 
@@ -85,14 +84,16 @@ class CategoryController extends Controller
      */
     public function update(Request $request)
     {
-        $edit_id = $request ->edit_id;
+        $permission = json_encode($request->per);
 
-        $update_data = Category::find($edit_id);
-        $update_data -> name = $request -> name;
+        $update_data = Role::find($request->id);
+        
+        $update_data -> name = $request->name;
         $update_data -> slug = Str::slug($request->name);
+        $update_data -> permission = $permission;
         $update_data -> update();
 
-        return redirect()->route('category.index')->with('success', 'Category updated successfull');
+        return redirect()->route('role.index')->with('success', 'Role updated successfull');
     }
 
     /**
@@ -103,30 +104,6 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $delete_data = Category::find($id);
-        $delete_data -> delete();
-        return redirect()->route('category.index')->with('success', 'Category deleted successfull');
+        //
     }
-
-    public function statusUpdateInactive($id)
-    {
-        $status_update = Category::find($id);
-
-        if( $status_update->status = true ){
-            $status_update->status = false;
-        }else{
-            $status_update->status = true; 
-        }
-        
-        $status_update -> update();
-    }
-
-    // public function statusUpdateActive($id)
-    // {
-    //     $status_update = Category::find($id);
-
-    //     $status_update->status = true;
-    //     $status_update->update();
-    // }
-
 }

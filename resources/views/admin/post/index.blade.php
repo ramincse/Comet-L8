@@ -45,6 +45,7 @@
 										<tr>
 											<th>#</th>
 											<th>Title</th>
+											<th>Author</th>
 											<th>Post Type</th>
 											<th>Category</th>
 											<th>Tags</th>
@@ -62,14 +63,31 @@
 										<tr>
 											<td>{{ $loop-> index + 1 }}</td>
 											<td>{{ $data->title }}</td>
+											<td>{{ $data -> user -> name }}</td>
 											<td>{{ $featured_data->post_type }}</td>
-											<td></td>
-											<td></td>
+											<td>
+												<ul>
+													@foreach($data->categories as $cat)
+													<li>{{ $cat -> name }}</li>
+													@endforeach
+												</ul>
+											</td>
+											<td>
+												<ul>
+													@foreach($data->tags as $tag)
+													<li>{{ $tag -> name }}</li>
+													@endforeach
+												</ul>
+											</td>
 											<td>{{ $data->created_at->diffForHumans() }}</td>
 											<td>
 												<div class="status-toggle">
-													<input status_id="{{ $data->id }}" type="checkbox" id="cat_status_{{ $loop-> index + 1 }}" class="check tag_check" {{ $data->status == true ? 'checked="checked"' : '' }} />
-													<label for="cat_status_{{ $loop-> index + 1 }}" class="checktoggle">checkbox</label>
+													<input post_id="{{ $data->id }}" type="checkbox" id="post_switcher_{{ $loop-> index + 1 }}" class="check post_switcher" <?php if ($data->status == true) {
+																																												echo 'checked';
+																																											} else {
+																																												echo '';
+																																											} ?> />
+													<label for="post_switcher_{{ $loop-> index + 1 }}" class="checktoggle">checkbox</label>
 												</div>
 											</td>
 											<td>
@@ -86,54 +104,6 @@
 					</div>
 				</div>
 
-			</div>
-
-			<!-- Add Tag Modal -->
-			<div id="add_tag_modal" class="modal fade">
-				<div class="modal-dialog modal-dialog-centered">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h4 class="modal-title">Add New Tag</h4>
-							<button class="close" data-dismiss="modal">&times;</button>
-						</div>
-						<div class="modal-body">
-							<form action="{{ route('tag.store') }}" method="POST">
-								@csrf
-								<div class="form-group">
-									<input name="name" class="form-control" type="text" placeholder="Name">
-								</div>
-								<div class="form-group">
-									<input class="btn btn-block btn-info" type="submit" value="Add Tag">
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Edit Tag Modal -->
-			<div id="edit_tag_modal" class="modal fade">
-				<div class="modal-dialog modal-dialog-centered">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h4 class="modal-title">Update Tag</h4>
-							<button class="close" data-dismiss="modal">&times;</button>
-						</div>
-						<div class="modal-body">
-							<form action="{{ route('tag.update', 1) }}" method="POST">
-								@csrf
-								@method('PUT')
-								<div class="form-group">
-									<input name="edit_id" class="form-control" type="hidden" placeholder="Name">
-									<input name="name" class="form-control" type="text" placeholder="Name">
-								</div>
-								<div class="form-group">
-									<input class="btn btn-block btn-info" type="submit" value="Update Tag">
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
 			</div>
 
 		</div>

@@ -71,7 +71,6 @@
                     <!-- end of article-->
 
                 </div>
-                {{ $all_data -> links('paginate') }}
                 <!-- end of pagination-->
             </div>
 

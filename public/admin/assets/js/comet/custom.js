@@ -187,8 +187,57 @@
             $('.post-gallery-img').html(img_gall);
         });
         
+        /**
+         * Blog Post Status Update
+         */
+        $(document).on('change', '.post_switcher', function () {
+            let checked = $(this).attr('checked');
 
+            let post_id = $(this).attr('post_id');
 
+            if (checked == 'checked' ){
+                $.ajax({
+                    url: '/post-status-update/' + post_id,
+                    success: function (data) {
+                        swal('Post Inactivated Successfull!');
+                    }
+                });
+            }else{
+                $.ajax({
+                    url: '/post-status-update/' + post_id,
+                    success: function (data) {
+                        swal('Post Activated Successfull!');
+                    }
+                });
+            }
+
+        });
+
+        /**
+         * Admin Menu Manage
+         */
+        $('#sidebar-menu ul li ul li.ok').parent('ul').slideDown();
+        $('#sidebar-menu ul li ul li.ok a').css('color', '#20e3ff');
+        $('#sidebar-menu ul li ul li.ok').parent('ul').parent('li').children('a').css('background-color', '#19c1dc');
+        $('#sidebar-menu ul li ul li.ok').parent('ul').parent('li').children('a').addClass('subdrop');
+
+        /**
+         * Role Update
+         */
+        $(document).on('click', '#edit_role', function(e){
+            e.preventDefault();
+            let edit_id = $(this).attr('edit_id');
+            
+            $.ajax({
+                url: '/edit-role/' + edit_id,
+                dataType: "json",
+                success: function(data){
+                    $('#edit_role_modal input[name="id"]').val(data.id);
+                    $('#edit_role_modal input[name="name"]').val(data.name);
+                    $('#edit_role_modal').modal('show');
+                }
+            }); 
+        });
 
     });
 })(jQuery)
