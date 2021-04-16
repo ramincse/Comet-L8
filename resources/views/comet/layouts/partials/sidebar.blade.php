@@ -42,7 +42,7 @@
                 @endphp
                 @foreach( $all_post as $post )
                 <li>
-                    <a href="{{ $post -> slug }}">{{ $post -> title }}<i class="ti-arrow-right"></i><span>{{ date('d M, Y', strtotime( $post -> created_at )) }}</span></a>
+                    <a href="{{ route('post.single', $post->slug) }}">{{ $post -> title }}<i class="ti-arrow-right"></i><span>{{ date('d M, Y', strtotime( $post -> created_at )) }}</span></a>
                 </li>
                 @endforeach
             </ul>

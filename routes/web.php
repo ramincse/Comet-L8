@@ -67,3 +67,4 @@ Route::get('blog/{slug}', [\App\Http\Controllers\BlogPageController::class, 'blo
 Route::post('blog', [\App\Http\Controllers\BlogPageController::class, 'searchBlog'])->name('post.search');
 Route::get('blog/category/{slug}', [\App\Http\Controllers\BlogPageController::class, 'searchBlogByCat'])->name('post.cat.search');
 Route::get('blog/tag/{slug}', [\App\Http\Controllers\BlogPageController::class, 'searchBlogByTag'])->name('post.tag.search');
+Route::get('blog/admin/{user_id}', [\App\Http\Controllers\BlogPageController::class, 'searchBlogByAdmin'])->name('post.admin.search');

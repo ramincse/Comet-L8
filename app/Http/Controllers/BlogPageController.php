@@ -53,6 +53,17 @@ class BlogPageController extends Controller
     }
 
     /**
+     * Blog Post Search BY Admin
+     */
+    public function searchBlogByAdmin($user_id)
+    {
+        $all_data = Post::where('user_id', $user_id)->latest()->paginate(2);
+        return view('comet.blog-admin', [
+            'all_data' => $all_data,
+        ]);
+    }
+
+    /**
      * Single Post Show
      */
     public function blogSingle($slug)
