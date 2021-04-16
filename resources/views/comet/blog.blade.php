@@ -64,7 +64,7 @@
 
                         <div class="post-body">
                             {!! Str::of(htmlspecialchars_decode($data -> content)) -> words(30) !!}
-                            <p><a href="#" class="btn btn-color btn-sm">Read More</a></p>
+                            <p><a href="{{ route('post.single', $data->slug) }}" class="btn btn-color btn-sm">Read More</a></p>
                         </div>
                     </article>
                     @endforeach

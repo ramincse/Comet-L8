@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
@@ -105,5 +106,28 @@ class RoleController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function statusUpdateRole($id)
+    {
+        $status_data = Role::find($id);
+
+        if( $status_data->status== true ){
+            $status_data->status = false;
+            $status_data->update();
+        }else{
+            $status_data->status = true;
+            $status_data->update();
+        }        
+    }
+
+    /**
+     * Role Assaign
+     */
+    public function assignRole(Request $request)
+    {
+        $user_data = User::find($request->assign_role_user);
+        $user_data->role_id = $request->assign_role_select;
+        $user_data->update();
     }
 }

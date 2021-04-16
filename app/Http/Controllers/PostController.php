@@ -86,7 +86,8 @@ class PostController extends Controller
         $post_data = Post::create([
             'user_id'   => Auth::user()->id,
             'title'     => $request->title,
-            'slug'      => Str::slug($request->title),
+            //'slug'      => Str::slug($request->title),
+            'slug'      => str_replace(' ', '-', $request->title),
             'featured'  => json_encode($post_featured), 
             //json_encode($array,JSON_UNESCAPED_SLASHES); //JSON.stringfy(json); //json_decode($mystring, JSON_UNESCAPED_SLASHES);
 

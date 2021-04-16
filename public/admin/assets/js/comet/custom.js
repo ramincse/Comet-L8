@@ -239,5 +239,63 @@
             }); 
         });
 
+        /**
+         * Role Status Update
+         */
+        $(document).on('click', '.role_check', function (e) {
+            let status_id = $(this).attr('status_id');
+            let status = $(this).attr('status');
+
+            $.ajax({
+                url: '/role/status-update/' + status_id,
+                success: function (data){
+                    if (status == true ){
+                        swal('Role inactivated Successfull!');
+                    }else{
+                        swal('Role activated Successfull!');
+                    }
+                }
+            });            
+        });
+
+    /**
+     * Role Assign to User
+     */
+
+        $('#assign_role_user').select2();
+        $('#assign_role_select').select2();
+        
+        $(document).on('click', '#assign_role', function(e){
+            e.preventDefault();
+            $('#assign_role_modal').modal('show');
+            
+        });
+
+        $(document).on('submit', '#assign_role_form', function(e){
+            e.preventDefault();
+            
+            let assign_role_user = $('form#assign_role_form select[name="assign_role_user"]').val();
+            let assign_role_select = $('form#assign_role_form select[name="assign_role_select"]').val();
+            
+            if (assign_role_user == '0' || assign_role_select == '0'){
+                swal('All fields are required !');
+            }else{
+                $.ajax({
+                    url: '/role/assign',
+                    method: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: new FormData(this),
+                    success: function (data) {
+                        //$("#assign_role_user").val('').trigger('change');
+                        //$("#assign_role_select").val('').trigger('change');
+                        //$('#assign_role_select').val(null).trigger('change');
+                        $('#assign_role_modal').modal('hide');
+                        swal('User role added successfull !');
+                    }
+                }); 
+            }
+        });
+
     });
 })(jQuery)

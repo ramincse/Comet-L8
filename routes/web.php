@@ -52,11 +52,14 @@ Route::get('/tag/status-active/{id}', 'App\Http\Controllers\TagController@status
  */
 Route::resource('/role', 'App\Http\Controllers\RoleController');
 Route::get('edit-role/{id}', 'App\Http\Controllers\RoleController@edit')->name('edit.role');
+Route::get('/role/status-update/{id}', 'App\Http\Controllers\RoleController@statusUpdateRole')->name('role.status.update');
+Route::post('/role/assign', 'App\Http\Controllers\RoleController@assignRole')->name('role.assign');
 
 /**
  * Route For Frontend
  */
 Route::get('blog', [\App\Http\Controllers\BlogPageController::class, 'showBlogPage']);
+Route::get('blog/{slug}', [\App\Http\Controllers\BlogPageController::class, 'blogSingle'])->name('post.single');
 
 /**
  * Route For Search Blog Post

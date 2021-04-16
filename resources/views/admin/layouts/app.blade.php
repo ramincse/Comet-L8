@@ -63,6 +63,6 @@
     <!-- Custom JS -->
     <script src="{{ asset('admin/assets/js/script.js') }}"></script>
     <script src="{{ asset('admin/assets/js/comet/custom.js') }}"></script>
-
+    @yield('javascript')
 
 </html>

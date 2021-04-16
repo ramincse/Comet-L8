@@ -4885,3 +4885,5 @@ footer.dark p {
     transform: scale(1);
   }
 }
+
+.post-tag:last-child span.sptcoma{display: none;}

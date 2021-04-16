@@ -32,6 +32,7 @@
 				<div class="col-lg-12 col-md-12">
 					@include('validate')
 					<a class="btn btn-sm btn-info mb-2" data-toggle="modal" href="#add_role_modal">Add New Role</a>
+					<a id="assign_role" class="btn btn-sm btn-primary mb-2 pull-right" data-toggle="modal" href="#">Role Assign</a>
 					<div class="card">
 						<div class="card-header">
 							<h4 class="card-title">All Roles</h4>
@@ -60,8 +61,8 @@
 											</td>
 											<td>
 												<div class="status-toggle">
-													<input status_id="{{ $data->id }}" checked="{{ $data->status == true ? 'checked="checked"' : '' }}" type="checkbox" id="cat_status_{{ $loop-> index + 1 }}" class="check cat_check" />
-													<label for="cat_status_{{ $loop-> index + 1 }}" class="checktoggle">checkbox</label>
+													<input status="{{ $data->status }}" status_id="{{ $data->id }}" {{ ($data -> status== true) ? 'checked' : '' }} type="checkbox" id="role_status_{{ $loop-> index + 1 }}" class="check role_check" />
+													<label for="role_status_{{ $loop-> index + 1 }}" class="checktoggle">checkbox</label>
 												</div>
 											</td>
 											<td>
@@ -147,8 +148,8 @@
 								@csrf
 								@method('PUT')
 								<div class="form-group">
-									<input name="id" class="form-control" type="hidden" value="" >
-									<input name="name" class="form-control" type="text" value="" >
+									<input name="id" class="form-control" type="hidden" value="">
+									<input name="name" class="form-control" type="text" value="">
 								</div>
 
 								<div class="form-group">
@@ -188,11 +189,68 @@
 				</div>
 			</div>
 
+			<!-- Assaign Role Modal -->
+			<div id="assign_role_modal" class="modal fade">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">Role Assaign</h4>
+							<button class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<div class="modal-body">
+							<form id="assign_role_form" action="#" method="POST">
+								@csrf
+
+								@php
+								$all_users = App\Models\User::all();
+								@endphp
+
+								<div class="form-group">
+									<label class="col-lg-3 col-form-label">User Name</label>
+									<select name="assign_role_user" id="assign_role_user" class="form-control">
+										<option value="0">-select-</option>
+										@foreach($all_users as $users)
+										<option value="{{ $users->id }}">{{ $users->name }}</option>
+										@endforeach
+									</select>
+								</div>
+
+								@php
+								$all_roles = App\Models\Role::all();
+								@endphp
+								<div class="form-group">
+									<label class="col-lg-3 col-form-label">Role Name</label>
+									<select name="assign_role_select" id="assign_role_select" class="form-control">
+										<option selected value="0">-select-</option>
+										@foreach($all_roles as $roles)
+										<option value="{{ $roles->id }}">{{ $roles->name }}</option>
+										@endforeach
+									</select>
+								</div>
+
+
+								<div class="form-group">
+									<input onclick="reset_select2()" id="configreset" class="btn btn-block btn-info" type="submit" value="Add">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
 		</div>
 	</div>
 	<!-- /Page Wrapper -->
 
 </div>
 <!-- /Main Wrapper -->
-
+@section('javascript')
+<script>
+	function reset_select2() {
+		$("#assign_role_user").val('').trigger('change');
+		$("#assign_role_select").val('').trigger('change');
+	}
+	//alert();
+</script>
+@stop
 @endsection

@@ -51,4 +51,13 @@ class BlogPageController extends Controller
             'all_data' => $all_data->posts,
         ]);
     }
+
+    /**
+     * Single Post Show
+     */
+    public function blogSingle($slug)
+    {
+        $single_post = Post::where('slug', $slug)->first();
+        return view('comet.blog-single', compact('single_post'));
+    }
 }
